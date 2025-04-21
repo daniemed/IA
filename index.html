@@ -1,0 +1,164 @@
+<html>
+    <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"font": {"color": "black"}, "group": null, "id": 1, "label": "Jos\u00e9 Luis", "shape": "dot", "title": "Dise\u00f1o / UX"}, {"font": {"color": "black"}, "group": null, "id": 2, "label": "Javier", "shape": "dot", "title": "Estudiante / En transici\u00f3n"}, {"font": {"color": "black"}, "group": null, "id": 3, "label": "Josefina", "shape": "dot", "title": "Transporte"}, {"font": {"color": "black"}, "group": null, "id": 4, "label": "Jos\u00e9", "shape": "dot", "title": "Desarrollo de Software / Ingenier\u00eda"}, {"font": {"color": "black"}, "group": null, "id": 5, "label": "Juan", "shape": "dot", "title": "Alimentos y Bebidas"}, {"font": {"color": "black"}, "group": null, "id": 6, "label": "Mar\u00eda", "shape": "dot", "title": "Tecnolog\u00eda / Datos / IA"}, {"font": {"color": "black"}, "group": null, "id": 7, "label": "Rox", "shape": "dot", "title": "Legal / Jur\u00eddico"}, {"font": {"color": "black"}, "group": null, "id": 8, "label": "Juan", "shape": "dot", "title": "Legal / Jur\u00eddico"}, {"font": {"color": "black"}, "group": null, "id": 9, "label": "Pedro", "shape": "dot", "title": "Emprendimiento"}, {"font": {"color": "black"}, "group": null, "id": 10, "label": "Daniel", "shape": "dot", "title": "Tecnolog\u00eda / Datos"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "color": "#888", "from": 1, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un blog o un\npodcast donde la persona de\nDise\u00f1o/UX comparta su proceso de\naprendizaje en IA y la\npersona de Estudiante/En transici\u00f3n comparta\nsu experiencia en liderazgo y\nan\u00e1lisis de datos. Esto les\npermitir\u00e1 conectar con otros profesionales\ninteresados en estas \u00e1reas, compartir\nconocimientos y colaborar en proyectos\nrelacionados con inteligencia artificial y\nan\u00e1lisis de datos.\nGenerado por IA", "to": 2, "width": 1}, {"arrows": "to", "color": "#888", "from": 1, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un proyecto conjunto de\ndesarrollo de una aplicaci\u00f3n m\u00f3vil\nque integre inteligencia artificial para\nmejorar la experiencia de usuario.\nLa aplicaci\u00f3n podr\u00eda estar relacionada\ncon la rob\u00f3tica, ofreciendo informaci\u00f3n\nsobre diferentes tipos de robots,\ntutoriales de programaci\u00f3n y recomendaciones\nde proyectos. Esta colaboraci\u00f3n permitir\u00e1\na ambas partes adquirir nuevas\nhabilidades, ampliar su red y\nabrir nuevas oportunidades profesionales en\nel campo de la tecnolog\u00eda.\nGenerado por IA", "to": 4, "width": 1}, {"arrows": "to", "color": "#888", "from": 1, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear una aplicaci\u00f3n m\u00f3vil que\nutilice inteligencia artificial para analizar\nlos datos financieros de un\nnegocio de alimentos y bebidas.\nLa app ofrecer\u00e1 recomendaciones personalizadas\npara mejorar la rentabilidad y\neficiencia. El dise\u00f1ador se encargar\u00e1\nde la interfaz de usuario\ny la experiencia de usuario,\nmientras que el contador se\nencargar\u00e1 de los an\u00e1lisis de\ndatos y la contabilidad. Juntos\npodr\u00e1n compartir conocimientos y ampliar\nsu red.\nGenerado por IA", "to": 5, "width": 1}, {"arrows": "to", "color": "#888", "from": 1, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Desarrollar un proyecto de rob\u00f3tica\nque incorpore inteligencia artificial para\nmejorar la experiencia de usuario\nen un entorno industrial. Utilizando\nPLCs para el control de\nprocesos y la recopilaci\u00f3n de\ndatos, se pueden dise\u00f1ar soluciones\ninnovadoras que optimicen la eficiencia\ny la seguridad en la\nproducci\u00f3n. Esta colaboraci\u00f3n permitir\u00e1 a\nambas partes ampliar su conocimiento\ny generar ideas disruptivas en\nel campo de la industria\n4.\nGenerado por IA", "to": 6, "width": 1}, {"arrows": "to", "color": "#888", "from": 1, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Desarrollar una plataforma legal online\nque utilice inteligencia artificial para\nanalizar contratos y documentos legales,\nbrindando recomendaciones personalizadas. Esto permitir\u00e1\na abogados mejorar su eficiencia\nen la revisi\u00f3n de documentos\ny a dise\u00f1adores de UX\naprender sobre IA. Adem\u00e1s, podr\u00e1n\ncolaborar en la creaci\u00f3n de\ninterfaces intuitivas y amigables para\nlos usuarios. Juntos podr\u00e1n expandir\nsu red y colaborar en\nproyectos innovadores.\nGenerado por IA", "to": 8, "width": 1}, {"arrows": "to", "color": "#888", "from": 1, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un proyecto conjunto que\ncombine la experiencia en dise\u00f1o\nde software y UX con\nla expertise en Robotics y\nPLC. Desarrollar un robot aut\u00f3nomo\npara la industria que incorpore\ninteligencia artificial y controlador l\u00f3gico\nprogramable. Esto les permitir\u00e1 explorar\nnuevas posibilidades en la automatizaci\u00f3n\nindustrial y generar ideas innovadoras.\nAdem\u00e1s, trabajar juntos les ayudar\u00e1\na ampliar su red y\nencontrar nuevas oportunidades de colaboraci\u00f3n.\nGenerado por IA", "to": 9, "width": 1}, {"arrows": "to", "color": "#888", "from": 1, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear una plataforma de recomendaciones\npersonalizadas basadas en inteligencia artificial\npara dise\u00f1adores y desarrolladores, que\nles ayude a descubrir nuevas\nherramientas y recursos. Utilizando t\u00e9cnicas\nde ciencia de datos, se\nanalizar\u00e1n las preferencias de los\nusuarios para ofrecer sugerencias relevantes\ny mejorar la experiencia de\nusuario. Ambos colaboradores aportar\u00e1n sus\nconocimientos para dise\u00f1ar una interfaz\nintuitiva y atractiva.\nGenerado por IA", "to": 10, "width": 1}, {"arrows": "to", "color": "#888", "from": 2, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un proyecto de desarrollo\nde un robot que analice\ndatos en tiempo real para\noptimizar procesos en diferentes industrias.\nEl estudiante liderar\u00e1 el equipo\ny aprender\u00e1 an\u00e1lisis de datos,\nmientras que el ingeniero se\nencargar\u00e1 de la programaci\u00f3n del\nsoftware y aprender\u00e1 sobre rob\u00f3tica.\nEsta colaboraci\u00f3n les permitir\u00e1 adquirir\nnuevas habilidades y generar oportunidades\nprofesionales en el \u00e1mbito de\nla tecnolog\u00eda.\nGenerado por IA", "to": 4, "width": 1}, {"arrows": "to", "color": "#888", "from": 2, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un proyecto de an\u00e1lisis\nde datos para optimizar los\ncostos en la cadena de\nsuministro de un restaurante. El\nestudiante liderar\u00e1 el equipo y\naplicar\u00e1 sus habilidades de liderazgo,\nmientras que el profesional de\nalimentos y bebidas aportar\u00e1 su\nexperiencia en contabilidad. Ambos aprender\u00e1n\njuntos sobre an\u00e1lisis de datos\ny trabajar\u00e1n en la mejora\nde la eficiencia del negocio.\nGenerado por IA", "to": 5, "width": 1}, {"arrows": "to", "color": "#888", "from": 2, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Una idea creativa podr\u00eda ser\ndesarrollar un proyecto de rob\u00f3tica\nque utilice an\u00e1lisis de datos\npara optimizar el funcionamiento de\nun sistema automatizado controlado por\nPLC. Esto les permitir\u00e1 aplicar\nsus conocimientos en liderazgo, rob\u00f3tica,\nan\u00e1lisis de datos y PLC\npara crear soluciones innovadoras que\nmejoren la eficiencia de procesos\nindustriales.\nGenerado por IA", "to": 6, "width": 1}, {"arrows": "to", "color": "#888", "from": 2, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Desarrollar un programa de an\u00e1lisis\nde datos para optimizar la\ngesti\u00f3n financiera en proyectos legales,\nutilizando herramientas de big data.\nEsto permitir\u00e1 mejorar la toma\nde decisiones, identificar patrones y\ntendencias, y maximizar la eficiencia\nen la asignaci\u00f3n de recursos.\nAmbos podr\u00e1n combinar sus habilidades\npara ofrecer soluciones innovadoras y\nefectivas en el \u00e1mbito legal\ny financiero.\nGenerado por IA", "to": 7, "width": 1}, {"arrows": "to", "color": "#888", "from": 2, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un proyecto de investigaci\u00f3n\nsobre el impacto de las\nleyes en el rendimiento acad\u00e9mico\nde los estudiantes, utilizando an\u00e1lisis\nde datos para recopilar informaci\u00f3n\nrelevante y aplicar t\u00e9cnicas de\nciencia de datos para identificar\npatrones y tendencias. Esto permitir\u00e1\na ambas partes desarrollar habilidades\nen an\u00e1lisis de datos y\nciencia de datos, mientras colaboran\nen un proyecto con impacto\nsocial.\nGenerado por IA", "to": 8, "width": 1}, {"arrows": "to", "color": "#888", "from": 2, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Desarrollar un proyecto de automatizaci\u00f3n\nde procesos en una empresa\nutilizando PLC y an\u00e1lisis de\ndatos. La persona en transici\u00f3n\nliderar\u00e1 el equipo y aplicar\u00e1\nsus habilidades de liderazgo para\ncoordinar el proyecto, mientras que\nla persona emprendedora aportar\u00e1 su\nconocimiento en robotics y PLC.\nEl objetivo es optimizar los\nprocesos de la empresa y\ngenerar nuevas ideas para mejorar\nsu eficiencia.\nGenerado por IA", "to": 9, "width": 1}, {"arrows": "to", "color": "#888", "from": 2, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Desarrollar un proyecto de investigaci\u00f3n\nconjunto que combine el liderazgo\nestudiantil con el an\u00e1lisis de\ndatos para identificar patrones de\ncomportamiento en la comunidad estudiantil.\nUtilizar la creatividad para dise\u00f1ar\nencuestas y el pensamiento anal\u00edtico\npara interpretar los resultados, con\nel fin de mejorar la\nexperiencia acad\u00e9mica y promover el\nbienestar estudiantil.\nGenerado por IA", "to": 10, "width": 1}, {"arrows": "to", "color": "#888", "from": 3, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un sistema de seguimiento\ny an\u00e1lisis de datos para\nmejorar la gesti\u00f3n de personal\nen una empresa de transporte.\nUtilizando herramientas de big data,\nse podr\u00e1n identificar patrones de\ncomportamiento de los choferes y\ntomar decisiones basadas en datos\npara optimizar la eficiencia y\nla satisfacci\u00f3n del equipo.\nGenerado por IA", "to": 7, "width": 1}, {"arrows": "to", "color": "#888", "from": 3, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un sistema de an\u00e1lisis\nde datos para mejorar la\ngesti\u00f3n de personal en una\nempresa de transporte, utilizando t\u00e9cnicas\nde ciencia de datos. Esto\npermitir\u00e1 optimizar la asignaci\u00f3n de\nrutas, horarios y descansos para\nlos choferes, mejorando la eficiencia\noperativa y el bienestar de\nlos empleados. Adem\u00e1s, podr\u00e1n colaborar\nen proyectos futuros para implementar\nsoluciones innovadoras en el sector.\nGenerado por IA", "to": 8, "width": 1}, {"arrows": "to", "color": "#888", "from": 4, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Desarrollar un proyecto conjunto de\nautomatizaci\u00f3n de procesos industriales utilizando\nrob\u00f3tica y PLC. Implementar soluciones\ninnovadoras que mejoren la eficiencia\ny productividad en diferentes sectores.\nRealizar un estudio de mercado\npara identificar oportunidades laborales en\nel campo de la automatizaci\u00f3n.\nOrganizar eventos y charlas para\ninspirar a otros profesionales a\nexplorar nuevas tecnolog\u00edas en el\nsector.\nGenerado por IA", "to": 6, "width": 1}, {"arrows": "to", "color": "#888", "from": 4, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un software que automatice\nel an\u00e1lisis de datos legales\npara bufetes de abogados, utilizando\nt\u00e9cnicas de ciencia de datos\ny rob\u00f3tica. Esto permitir\u00e1 mejorar\nla eficiencia en la gesti\u00f3n\nde casos legales y brindar\nnuevas oportunidades profesionales en el\ncampo de la tecnolog\u00eda legal.\nAdem\u00e1s, podr\u00e1n colaborar en la\nimplementaci\u00f3n y mejora continua del\nsoftware en diferentes proyectos.\nGenerado por IA", "to": 8, "width": 1}, {"arrows": "to", "color": "#888", "from": 4, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un curso online de\nprogramaci\u00f3n en PLC para desarrolladores\nde software, donde se ense\u00f1e\ndesde lo b\u00e1sico hasta aplicaciones\navanzadas en rob\u00f3tica industrial. Esto\npermitir\u00e1 a ambos adquirir nuevas\nhabilidades, explorar nuevas oportunidades profesionales\ny generar ideas innovadoras para\nproyectos en el campo de\nla automatizaci\u00f3n industrial.\nGenerado por IA", "to": 9, "width": 1}, {"arrows": "to", "color": "#888", "from": 4, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un proyecto conjunto de\ndesarrollo de un robot aut\u00f3nomo\nque utilice t\u00e9cnicas de ciencia\nde datos para tomar decisiones\nen tiempo real. La persona\nde desarrollo de software se\nencargar\u00e1 de la programaci\u00f3n del\nrobot, mientras que la persona\nde tecnolog\u00eda / datos aplicar\u00e1\nsus conocimientos en an\u00e1lisis de\ndatos para optimizar su funcionamiento.\nEste proyecto les permitir\u00e1 combinar\nsus habilidades y explorar nuevas\noportunidades profesionales.\nGenerado por IA", "to": 10, "width": 1}, {"arrows": "to", "color": "#888", "from": 5, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Desarrollar un software de gesti\u00f3n\nde inventario y an\u00e1lisis de\ndatos para empresas de alimentos\ny bebidas, que permita mejorar\nla eficiencia en la producci\u00f3n\ny distribuci\u00f3n de productos. Integrar\nfunciones de contabilidad para un\nmejor control financiero y de\nrob\u00f3tica para automatizar procesos. Esta\ncolaboraci\u00f3n permitir\u00e1 a ambas partes\nadquirir nuevas habilidades y abrir\nnuevas oportunidades en sus respectivos\ncampos.\nGenerado por IA", "to": 4, "width": 1}, {"arrows": "to", "color": "#888", "from": 5, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Desarrollar un sistema de control\nautomatizado para la gesti\u00f3n de\ninventarios en la industria alimentaria,\nutilizando PLC y an\u00e1lisis de\ndatos. Esto permitir\u00e1 optimizar los\nprocesos de contabilidad y log\u00edstica,\nmejorando la eficiencia y reduciendo\ncostos. Adem\u00e1s, podr\u00e1n generar informes\ndetallados para tomar decisiones estrat\u00e9gicas\nbasadas en datos reales.\nGenerado por IA", "to": 6, "width": 1}, {"arrows": "to", "color": "#888", "from": 5, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un programa de an\u00e1lisis\nde datos para optimizar la\ngesti\u00f3n financiera de empresas del\nsector de alimentos y bebidas,\nutilizando herramientas de big data.\nEsto permitir\u00e1 tomar decisiones financieras\nm\u00e1s informadas y eficientes. Ambos\ncolaboradores aportar\u00e1n sus conocimientos para\ndesarrollar el proyecto y compartir\u00e1n\nlos beneficios de la implementaci\u00f3n\nen empresas reales.\nGenerado por IA", "to": 7, "width": 1}, {"arrows": "to", "color": "#888", "from": 5, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un sistema de an\u00e1lisis\nde datos para optimizar la\ngesti\u00f3n financiera de una empresa\nde alimentos y bebidas, integrando\naspectos legales y fiscales. Mediante\nla aplicaci\u00f3n de t\u00e9cnicas de\nciencia de datos, se podr\u00e1n\nidentificar patrones y oportunidades de\nmejora en los procesos contables,\ncontribuyendo a una toma de\ndecisiones m\u00e1s informada y eficiente.\nGenerado por IA", "to": 8, "width": 1}, {"arrows": "to", "color": "#888", "from": 5, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un sistema de an\u00e1lisis\nde datos para optimizar la\nproducci\u00f3n de alimentos mediante PLC\nen la industria alimentaria. Utilizando\nlos conocimientos de contabilidad para\nanalizar costos y eficiencia, y\naplicando la expertise en robotics\npara implementar soluciones automatizadas. Esto\npermitir\u00e1 aumentar la productividad, reducir\ndesperdicios y mejorar la calidad\nde los productos.\nGenerado por IA", "to": 9, "width": 1}, {"arrows": "to", "color": "#888", "from": 5, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un sistema de an\u00e1lisis\nde datos para optimizar la\ngesti\u00f3n contable de un negocio\nde alimentos y bebidas. La\npersona de tecnolog\u00eda desarrollar\u00e1 el\nsistema basado en la creatividad,\nmientras que la persona de\nalimentos y bebidas aportar\u00e1 su\nconocimiento contable. Ambos colaborar\u00e1n para\nimplementar y compartir esta herramienta\nque permita mejorar la toma\nde decisiones y el rendimiento\nfinanciero del negocio.\nGenerado por IA", "to": 10, "width": 1}, {"arrows": "to", "color": "#888", "from": 6, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un programa de formaci\u00f3n\nen el que el experto\nen Rob\u00f3tica ense\u00f1e a utilizar\nPLCs en la automatizaci\u00f3n de\nbuses, mejorando la eficiencia y\nseguridad en el transporte. A\nsu vez, el chofer de\nbus compartir\u00e1 sus conocimientos en\ngesti\u00f3n de personas para optimizar\nel trabajo en equipo. Esta\ncolaboraci\u00f3n inspirar\u00e1 nuevas ideas para\nla implementaci\u00f3n de tecnolog\u00eda en\nel transporte p\u00fablico.\nGenerado por IA", "to": 3, "width": 1}, {"arrows": "to", "color": "#888", "from": 6, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Desarrollar un sistema de gesti\u00f3n\nfinanciera automatizado que utilice big\ndata para analizar patrones de\ngastos y generar recomendaciones personalizadas\nde ahorro. Integrar PLC para\nla automatizaci\u00f3n de procesos de\nseguimiento y control. Esto permitir\u00e1\na los usuarios optimizar sus\nfinanzas de manera eficiente y\nsegura, a la vez que\nexploran nuevas tecnolog\u00edas y enfoques\nen sus respectivos campos.\nGenerado por IA", "to": 7, "width": 1}, {"arrows": "to", "color": "#888", "from": 6, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Desarrollar un sistema de inteligencia\nartificial para analizar contratos legales\nautom\u00e1ticamente, identificando cl\u00e1usulas clave y\nposibles riesgos. Utilizando la rob\u00f3tica\npara automatizar el proceso de\nextracci\u00f3n de datos y la\nciencia de datos para analizar\ny presentar la informaci\u00f3n de\nmanera clara y concisa. Esto\npermitir\u00e1 a los abogados ahorrar\ntiempo en la revisi\u00f3n de\ncontratos y tomar decisiones m\u00e1s\ninformadas.\nGenerado por IA", "to": 8, "width": 1}, {"arrows": "to", "color": "#888", "from": 6, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Desarrollar un sistema de control\nbasado en PLC para robots\nindustriales que permita una mayor\nflexibilidad y adaptabilidad en los\nprocesos de producci\u00f3n. Esta colaboraci\u00f3n\npermitir\u00e1 combinar el conocimiento en\nrob\u00f3tica y PLC para crear\nsoluciones innovadoras que mejoren la\neficiencia y productividad en la\nindustria, inspirando nuevas ideas y\noportunidades de negocio.\nGenerado por IA", "to": 9, "width": 1}, {"arrows": "to", "color": "#888", "from": 6, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Desarrollar un proyecto de rob\u00f3tica\nque integre PLC para automatizar\nprocesos industriales y recopilar datos\nutilizando sensores. Utilizar la ciencia\nde datos para analizar y\noptimizar el rendimiento de la\nmaquinaria. Esto permitir\u00e1 mejorar la\neficiencia de las operaciones, reducir\ncostos y generar nuevas ideas\npara la innovaci\u00f3n en el\nsector industrial.\nGenerado por IA", "to": 10, "width": 1}, {"arrows": "to", "color": "#888", "from": 7, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un software de an\u00e1lisis\nfinanciero basado en big data\ny IA que ayude a\nempresas a tomar decisiones m\u00e1s\ninformadas. La persona del sector\nlegal/jur\u00eddico aportar\u00e1 su conocimiento en\nfinanzas y la del sector\ndise\u00f1o/UX en desarrollo de software\ny UX. Esta colaboraci\u00f3n permitir\u00e1\nampliar la red de contactos\ny abrir nuevas oportunidades en\nel mercado.\nGenerado por IA", "to": 1, "width": 1}, {"arrows": "to", "color": "#888", "from": 7, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un software de an\u00e1lisis\nfinanciero basado en big data\nque utilice algoritmos de rob\u00f3tica\npara automatizar procesos de recolecci\u00f3n\ny an\u00e1lisis de datos. Este\nproyecto permitir\u00e1 a ambas partes\ncombinar sus conocimientos para ofrecer\nsoluciones innovadoras a empresas y\nparticulares, mejorando la toma de\ndecisiones financieras y generando nuevas\noportunidades profesionales en el mercado.\nGenerado por IA", "to": 4, "width": 1}, {"arrows": "to", "color": "#888", "from": 7, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un sistema de an\u00e1lisis\nde datos para predecir tendencias\nfinancieras basado en la ciencia\nde datos. Utilizando las habilidades\nen finanzas y an\u00e1lisis de\ndatos, desarrollar modelos predictivos para\nasesorar en inversiones y estrategias\nfinancieras. Este proyecto permitir\u00e1 combinar\nconocimientos y habilidades para maximizar\nla precisi\u00f3n en la toma\nde decisiones financieras.\nGenerado por IA", "to": 8, "width": 1}, {"arrows": "to", "color": "#888", "from": 7, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un sistema automatizado de\nan\u00e1lisis de datos financieros utilizando\nBig Data y PLC. Esto\npermitir\u00e1 a la persona del\nsector legal/jur\u00eddico adentrarse en el\nmundo del Big Data, mientras\nque la persona del emprendimiento\npodr\u00e1 aplicar sus conocimientos en\nRobotics para desarrollar un sistema\neficiente. Juntos podr\u00e1n colaborar en\nproyectos para optimizar procesos financieros\ny generar nuevas ideas en\nel \u00e1mbito empresarial.\nGenerado por IA", "to": 9, "width": 1}, {"arrows": "to", "color": "#888", "from": 7, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un sistema de an\u00e1lisis\nde datos financieros basado en\nbig data que permita a\nlos abogados especializados en finanzas\ntomar decisiones m\u00e1s informadas. Utilizar\nla creatividad para visualizar los\ndatos de manera m\u00e1s accesible\ny comprensible, y aplicar la\nciencia de datos para mejorar\nla precisi\u00f3n y eficacia del\nan\u00e1lisis. Colaborar en la implementaci\u00f3n\ny compartir conocimientos para optimizar\nel proceso.\nGenerado por IA", "to": 10, "width": 1}, {"arrows": "to", "color": "#888", "from": 8, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Desarrollar un sistema de automatizaci\u00f3n\nlegal utilizando PLC y robotics\npara agilizar procesos legales, como\nla revisi\u00f3n de contratos. Utilizar\nla ciencia de datos para\nanalizar el rendimiento del sistema\ny mejorar su eficiencia. Esto\npermitir\u00e1 a la persona del\nsector legal aprender sobre ciencia\nde datos y al emprendedor\nsobre PLC, mientras colaboran en\nun proyecto innovador y \u00fatil.\nGenerado por IA", "to": 9, "width": 1}, {"arrows": "to", "color": "#888", "from": 8, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Crear un software de an\u00e1lisis\nde datos para el sector\nlegal que utilice algoritmos creativos\npara identificar patrones y tendencias\nen casos judiciales. Mediante la\ncolaboraci\u00f3n, ambos expertos podr\u00e1n combinar\nsus conocimientos para desarrollar una\nherramienta innovadora que facilite la\ntoma de decisiones en el\n\u00e1mbito legal, a la vez\nque comparten sus habilidades y\naprenden juntos sobre ciencia de\ndatos.\nGenerado por IA", "to": 10, "width": 1}, {"arrows": "to", "color": "#888", "from": 9, "title": "\ud83e\udd1d Conexi\u00f3n Inteligente\n\ud83d\udca1 Idea: Una idea creativa para desarrollar\njuntos podr\u00eda ser crear un\nproyecto de innovaci\u00f3n donde utilicen\nla tecnolog\u00eda PLC para automatizar\nun proceso en el \u00e1mbito\nde la rob\u00f3tica, y luego\naplicar la ciencia de datos\npara analizar y optimizar el\nrendimiento de dicho proceso. De\nesta manera, podr\u00e1n combinar sus\nhabilidades y conocimientos para generar\nnuevas ideas y compartir aprendizajes\nen ambas \u00e1reas.\nGenerado por IA", "to": 10, "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "barnesHut": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.3,
+            "damping": 0.09,
+            "gravitationalConstant": -30000,
+            "springConstant": 0.02,
+            "springLength": 250
+        },
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
